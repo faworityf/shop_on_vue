@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>absolute</title>
-  </head>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>[[*title]]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="http://m.absolut-kiev.com/assets/css/reset.css">
+    <link rel="stylesheet" href="http://m.absolut-kiev.com/assets/css/fonts.css">
+    <link rel="stylesheet" href="http://m.absolut-kiev.com/assets/css/index.css">
+
+
+    <meta name="keywords" content="[[*title]]">
+    <meta name="description" content="[[*keywords]]">
+
+    <meta property="og:title" content="[[*title]]"/>
+    <meta property="og:description" content="[[*descr]]"/>
+    <meta property="og:url" content="[[++site_url]][[~[[*id]]]]"/>
+    <meta property="og:image" content="[[++site_url]][[*seoimage]]"/>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@FedorV3">
+    <meta name="twitter:title" content="[[*title]]">
+    <meta name="twitter:description" content="[[*descr]] [[++site_url]][[~[[*id]]]]">
+    <meta name="twitter:image" content="[[++site_url]][[*seoimage]]">
+</head>
+
   <body>
     <noscript>
       <strong>We're sorry but absolute doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
@@ -14,4 +31,7 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+<script src="http://m.absolut-kiev.com/assets/js/libs/jquery-3.3.1.min.js"></script>
+<script src="http://m.absolut-kiev.com/assets/js/libs/slick.min.js"></script>
+<script src="http://m.absolut-kiev.com/assets/js/main.js"></script>
 </html>
