@@ -16,6 +16,7 @@
             }
         },
         mounted (el) {
+            this.$store.dispatch('SET_OBJ');
             this.routes = this.$store.getters.Obj;
             console.log(this.routes)
         }

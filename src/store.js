@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import axios from 'axios'
 import Home from '@/views/Home'
 import Category from '@/views/Category'
 
@@ -49,6 +49,25 @@ export default new Vuex.Store({
 
       }
     },
-    mutations: {},
-    actions: {}
+    mutations: {
+        SET_OBJ: (state, catalog) => {
+            state.global_obj.routes = catalog;
+        },
+    },
+
+    actions: {
+        SET_OBJ: async (context) => {
+            axios.get('http://m.absolut-kiev.com/star.html')
+                .then(function (response) {
+                    console.log(typeof response.data);
+                    let responseText = response.data.replace(/\r|\n/g, '');
+                    responseText = responseText.replace(/\s/g, '');
+                    responseText = responseText.replace(/},]/g, '}]');
+                    responseText = JSON.parse(responseText)
+                    console.log(responseText.catalog)
+                    context.commit('SET_OBJ', responseText.catalog);
+
+                })
+        },
+    }
 })
