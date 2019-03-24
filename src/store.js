@@ -12,28 +12,32 @@ let global_obj = {
             path: '/',
             name: 'home',
             component: Home,
+            menu: 'main'
         },
         {
             path: '/vodka',
             name: 'Водка',
             component: Category,
-            props: {gl: 'sadsa', fd: true},
+            menu: 'katalog',
             children: [
                 {
                     path: '/absolut',
                     name: 'absolut',
-                    component: Category
+                    component: Category,
+                    menu: 'katalog',
                 }, {
                     path: '/kozatska-rada',
                     name: 'Козацька Рада',
-                    component: Category
+                    component: Category,
+                    menu: 'katalog',
                 }
             ]
         },
         {
             path: '/vino',
             name: 'Вино ',
-            component: Category
+            component: Category,
+            menu: 'katalog',
         },
 
     ],
@@ -61,10 +65,10 @@ export default new Vuex.Store({
                 .then(function (response) {
                     console.log(typeof response.data);
                     let responseText = response.data.replace(/\r|\n/g, '');
-                    responseText = responseText.replace(/\s/g, '');
-                    responseText = responseText.replace(/},]/g, '}]');
+                    // responseText = responseText.replace(/\s/g, '');
+                    responseText = responseText.replace(/}, ]/g, '}]');
                     responseText = JSON.parse(responseText)
-                    console.log(responseText.catalog)
+                    console.log('responseText',responseText.catalog)
                     context.commit('SET_OBJ', responseText.catalog);
 
                 })
