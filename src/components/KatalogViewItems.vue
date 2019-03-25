@@ -1,37 +1,36 @@
 <template>
-    <div >
-        <div v-for="good in goods">
-            <KatalogViewItems :goods="good.children" v-if="good.children && good.item != 'msProduct'"></KatalogViewItems>
-            <div class="good" v-else-if="good.item == 'msProduct'">
+    <div class="goods">
+            <div class="good" v-for="good in goodsParsed">
                 <div class="good-wrap">
                     <div class="good-img">
-                        <a href="[[~[[+id]]]]">
+                        <a :href="good.path.trim()">
                             <img :src.trim="'//m.absolut-kiev.com'+good.image.trim()"/>
                         </a>
                     </div>
                     <div class="good-description">
                         <div class="good-name">
-                            <a href="[[~[[+id]]]]">
-                                [[+pagetitle]]
+                            <a :href="good.path.trim()">
+                                {{good.name.trim()}}
                             </a>
                         </div>
 
                         <div class="good-else">
                             <div class="good-displacement good-info">
-                                Емкость: <span>[[+weight]] л.</span>
+                                Емкость: <span>{{good.litrag.trim()}} л.</span>
                             </div>
                             <div class="good-alcohol good-info">
-                                Содержание алкоголя: <span>[[!msOptions? &name=`size` &product=`[[+id]]`]]</span>
+                                Содержание алкоголя: <span>{{good.alcohol.trim()}}</span>
                             </div>
                             <div class="good-county">
-                                Страна-производитель: <span>[[+made_in]]</span>
+                                Страна-производитель: <span>{{good.country.trim()}}</span>
                             </div>
 
                         </div>
                         <div class="price-buy">
                             <div class="prices">
-                                [[+old_price:is=`0`:then=`<div class="price-before with-null">&nbsp;</div>` :else=`<div class="price-before">[[+old_price]] грн.</div>`]]
-                                <div class="price-current">[[+price]] грн.</div>
+                                <div class="price-before" v-if="good.old_price.trim()">{{good.old_price.trim()}} грн.</div>
+                                <div class="price-before with-null" v-else></div>
+                                <div class="price-current">{{good.price.trim()}} грн.</div>
                             </div>
                             <div class="buy-btns">
                                 <div class="button but-oneclick js-buy-oneclick">Купить в один клик</div>
@@ -41,25 +40,49 @@
                     </div>
                 </div>
             </div>
-        </div>
-
     </div>
 </template>
 
 <script>
-    import KatalogViewItems from '@/components/KatalogViewItems.vue'
     export default {
         name: "KatalogViewItems",
         props:['goods'],
-        components: {
-            KatalogViewItems
-        },
         data() {
             return {
-                routes:{routes:{}}
+                routes:{routes:{}},
+                goodsParsed: []
             }
         },
+        created () {
+            this.parseObj(this.goods);
+            this.watchGetters();
+        },
 
+        methods: {
+            watchGetters: function () {
+                console.log('watch')
+                this.$store.subscribe((mutation, state) => {
+                    switch(mutation.type) {
+                        case 'SET_OBJ':
+                            this.parseObj(this.goods)
+
+                            break;
+                    }
+                })
+
+            },
+            parseObj: function (obj) {
+                for(let good in obj) {
+                    if(obj[good].item != 'msProduct' && obj[good].children) {
+                        this.parseObj(obj[good].children);
+                    }else if(obj[good].item == 'msProduct') {
+                        this.goodsParsed.push(obj[good]);
+                    }
+
+                }
+
+            }
+        },
     }
 </script>
 

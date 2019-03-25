@@ -2,11 +2,11 @@
     <div class="left-sidebar">
         <div class="cat">Каталог: <span>выберите товар</span></div>
         <ul class="catalog">
-            <li v-for="route in routes.routes" v-if="route.menu == 'katalog'">
+            <li v-for="route in routes.routes" v-if="route.menu == 'katalog' && route.parent == 2">
                 <router-link  :to="route.path">{{route.name}}</router-link>
-                <ul v-if="route" class="sub-ul-menu">
+                <ul  class="sub-ul-menu">
                     <ul>
-                        <li v-for="rout in route.children" v-if="route.menu == 'katalog'">
+                        <li v-for="rout in routes.routes" v-if="route.menu == 'katalog' && route.id == rout.parent">
                             <router-link  :to="rout.path">{{rout.name}}</router-link>
                         </li>
                     </ul>

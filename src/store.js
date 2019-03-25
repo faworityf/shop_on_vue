@@ -39,7 +39,6 @@ let global_obj = {
             component: Category,
             menu: 'katalog',
         },
-
     ],
     items: []
 }
@@ -50,7 +49,6 @@ export default new Vuex.Store({
     getters: {
       Obj : state=> {
           return state.global_obj
-
       }
     },
     mutations: {
@@ -63,12 +61,9 @@ export default new Vuex.Store({
         SET_OBJ: async (context) => {
             axios.get('http://m.absolut-kiev.com/star.html')
                 .then(function (response) {
-                    console.log(typeof response.data);
                     let responseText = response.data.replace(/\r|\n/g, '');
-                    // responseText = responseText.replace(/\s/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
                     responseText = JSON.parse(responseText)
-                    console.log('responseText',responseText.catalog)
                     context.commit('SET_OBJ', responseText.catalog);
 
                 })

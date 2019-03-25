@@ -1,14 +1,12 @@
 <template>
     <div>
-        <slider></slider>
+        <!--<slider></slider>-->
         <div class="container">
             <div class="content">
                 <LeftSidebar ></LeftSidebar>
                 <div class="main-content">
                         <SortingTable></SortingTable>
-                    <div class="goods">
                         <KatalogViewItems :goods="routes.routes" v-if="routes.routes"></KatalogViewItems>
-                    </div>
                 </div>
             </div>
         </div>
