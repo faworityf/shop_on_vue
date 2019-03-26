@@ -5,7 +5,6 @@ import Home from '@/views/Home'
 import Category from '@/views/Category'
 
 Vue.use(Vuex)
-console.log(Category)
 let global_obj = {
     routes: [
         {
@@ -14,57 +13,74 @@ let global_obj = {
             component: Home,
             menu: 'main'
         },
-        {
-            path: '/vodka',
-            name: 'Водка',
-            component: Category,
-            menu: 'katalog',
-            children: [
-                {
-                    path: '/absolut',
-                    name: 'absolut',
-                    component: Category,
-                    menu: 'katalog',
-                }, {
-                    path: '/kozatska-rada',
-                    name: 'Козацька Рада',
-                    component: Category,
-                    menu: 'katalog',
-                }
-            ]
-        },
-        {
-            path: '/vino',
-            name: 'Вино ',
-            component: Category,
-            menu: 'katalog',
-        },
     ],
     items: []
 }
+
+
 export default new Vuex.Store({
     state: {
-        global_obj : global_obj
+        globalObj : {}
     },
     getters: {
       Obj : state=> {
-          return state.global_obj
+          return state.globalObj
       }
     },
     mutations: {
-        SET_OBJ: (state, catalog) => {
-            state.global_obj.routes = catalog;
+        SET_MainRoute: (state, mainRoutes) => {
+            state.global_obj.mainRoutes = mainRoutes;
+        },
+        SET_Favorites: (state, favorites) => {
+            state.global_obj.favorites = favorites;
+        },
+        SET_SubRoute: (state, subRoutes) => {
+            state.global_obj.subRoutes = subRoutes;
+        },
+        SET_Items: (state, items) => {
+            state.global_obj.items = items;
         },
     },
 
     actions: {
-        SET_OBJ: async (context) => {
-            axios.get('http://m.absolut-kiev.com/star.html')
+        SET_MainRoute: async (context) => {
+            axios.get('http://m.absolut-kiev.com/start.html')
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
                     responseText = JSON.parse(responseText)
-                    context.commit('SET_OBJ', responseText.catalog);
+                    console.log(123)
+                    context.commit('SET_MainRoute', responseText.catalog);
+
+                })
+        },
+        SET_Favorites: async (context) => {
+            axios.get('http://m.absolut-kiev.com/favorite.html')
+                .then(function (response) {
+                    let responseText = response.data.replace(/\r|\n/g, '');
+                    responseText = responseText.replace(/}, ]/g, '}]');
+                    responseText = JSON.parse(responseText)
+                    context.commit('SET_Favorites', responseText.catalog);
+
+                })
+        },
+        SET_SubRoute: async (context) => {
+            axios.get('http://m.absolut-kiev.com/subMenu.html')
+                .then(function (response) {
+                    let responseText = response.data.replace(/\r|\n/g, '');
+                    responseText = responseText.replace(/}, ]/g, '}]');
+                    responseText = JSON.parse(responseText)
+                    context.commit('SET_SubRoute', responseText.catalog);
+
+                })
+        },
+        SET_Items: async (context) => {
+            axios.get('http://m.absolut-kiev.com/items.html')
+                .then(function (response) {
+                    let responseText = response.data.replace(/\r|\n/g, '');
+                    responseText = responseText.replace(/}, ]/g, '}]');
+                    responseText = JSON.parse(responseText)
+                    context.commit('SET_Items', responseText.catalog);
 
                 })
         },
