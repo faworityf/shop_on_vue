@@ -49,27 +49,27 @@
         props:['goods'],
         data() {
             return {
-                routes:{routes:{}},
                 goodsParsed: []
             }
         },
-        created () {
-            this.parseObj(this.goods);
+        mounted () {
             this.watchGetters();
         },
 
         methods: {
             watchGetters: function () {
-                console.log('watch')
                 this.$store.subscribe((mutation, state) => {
-                    switch(mutation.type) {
-                        case 'SET_OBJ':
-                            this.parseObj(this.goods)
+                    console.log(mutation.type, this.$route.path == '/')
 
-                            break;
+                    if(mutation.type == 'SET_Favorites' && this.$route.path == '/') {
+                        console.log(state.favorites)
+                        this.goodsParsed = state.favorites;
+                        console.log()
+                    }
+                    else if(mutation.type =='SET_Items' && this.$route.path != '/'){
+                            this.goodsParsed = state.items;
                     }
                 })
-
             },
             parseObj: function (obj) {
                 for(let good in obj) {

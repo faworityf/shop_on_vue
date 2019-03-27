@@ -1,12 +1,12 @@
 <template>
     <div>
+        <slider v-if="routes"></slider>
         <div class="container  category-goods">
             <div class="content">
-                <LeftSidebar ></LeftSidebar>
+                <LeftSidebar></LeftSidebar>
                 <div class="main-content">
                     <SortingTable></SortingTable>
-
-                    <KatalogViewItems :goods="routes.routes" v-if="routes.routes"></KatalogViewItems>
+                    <KatalogViewItems ></KatalogViewItems>
                 </div>
             </div>
         </div>
@@ -23,7 +23,8 @@
     export default {
         data() {
             return {
-                routes:{routes:{}}
+                routes: []
+
             }
         },
         components: {
@@ -33,8 +34,26 @@
             KatalogViewItems
         },
         mounted (el) {
-            this.$store.dispatch('SET_OBJ');
-            this.routes = this.$store.getters.Obj;
+            console.log('Category')
+            this.$store.dispatch('SET_MainRoute');
+            this.$store.dispatch('SET_Favorites');
+            this.$store.dispatch('SET_SubRoute');
+            this.$store.dispatch('SET_Items');
+            this.watchGetters();
+        },
+        methods: {
+            watchGetters: function () {
+                this.$store.subscribe((mutation, state) => {
+                    switch (mutation.type) {
+                        case 'SET_MainRoute':
+                            // console.log('state',state)
+                            // this.routes = state.globalObj.router
+                            // console.log(this.routes )
+                            break;
+                    }
+                })
+
+            },
         }
     }
 </script>

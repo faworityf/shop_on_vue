@@ -20,25 +20,68 @@ let global_obj = {
 
 export default new Vuex.Store({
     state: {
-        globalObj : {}
+        globalObj: {
+            router: [
+                {
+                    path: '/',
+                    name: 'home',
+                    component: Category,
+                    menu: 'main'
+                },
+                {
+                    path: '/:alias',
+                    name: 'home',
+                    component: Category,
+                    menu: 'main'
+                },
+                {
+                    path: '/:alias/:alias',
+                    name: 'home',
+                    component: Category,
+                    menu: 'main'
+                },
+            ]
+        },
+        mainRoutes: [],
+        favorites: [],
+        items: [],
+        subRoutes: []
     },
     getters: {
-      Obj : state=> {
-          return state.globalObj
-      }
+        Obj: state => {
+            return state.globalObj.router
+        },
+        mainRoutes: state => {
+            return state.mainRoutes
+        },
+        favorites: state => {
+            return state.favorites
+        },
+        items: state => {
+            return state.items
+        },
+        subRoutes: state => {
+            return state.subRoutes
+        },
     },
     mutations: {
         SET_MainRoute: (state, mainRoutes) => {
-            state.global_obj.mainRoutes = mainRoutes;
+            state.mainRoutes = mainRoutes;
+            // state.globalObj.router = state.globalObj.router.concat(mainRoutes);
         },
         SET_Favorites: (state, favorites) => {
-            state.global_obj.favorites = favorites;
+            state.favorites = favorites;
+            // state.globalObj.router = state.globalObj.router.concat(favorites);
         },
         SET_SubRoute: (state, subRoutes) => {
-            state.global_obj.subRoutes = subRoutes;
+            state.subRoutes = subRoutes;
+            // state.globalObj.router = state.globalObj.router.concat(subRoutes);
+
         },
         SET_Items: (state, items) => {
-            state.global_obj.items = items;
+            state.items = items;
+            // state.globalObj.router = state.globalObj.router.concat(items);
+
         },
     },
 
@@ -48,8 +91,10 @@ export default new Vuex.Store({
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
-                    responseText = JSON.parse(responseText)
-                    console.log(123)
+                    responseText = JSON.parse(responseText);
+                    for (let resp in responseText.catalog)  {
+                        responseText.catalog[resp].component = Category
+                    }
                     context.commit('SET_MainRoute', responseText.catalog);
 
                 })
@@ -59,7 +104,10 @@ export default new Vuex.Store({
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
-                    responseText = JSON.parse(responseText)
+                    responseText = JSON.parse(responseText);
+                    for (let resp in responseText.catalog)  {
+                        responseText.catalog[resp].component = Category
+                    }
                     context.commit('SET_Favorites', responseText.catalog);
 
                 })
@@ -69,7 +117,10 @@ export default new Vuex.Store({
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
-                    responseText = JSON.parse(responseText)
+                    responseText = JSON.parse(responseText);
+                    for (let resp in responseText.catalog)  {
+                        responseText.catalog[resp].component = Category
+                    }
                     context.commit('SET_SubRoute', responseText.catalog);
 
                 })
@@ -79,7 +130,10 @@ export default new Vuex.Store({
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
-                    responseText = JSON.parse(responseText)
+                    responseText = JSON.parse(responseText);
+                    for (let resp in responseText.catalog)  {
+                        responseText.catalog[resp].component = Category
+                    }
                     context.commit('SET_Items', responseText.catalog);
 
                 })

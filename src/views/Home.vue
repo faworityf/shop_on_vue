@@ -40,11 +40,11 @@
         },
         methods: {
             watchGetters: function () {
-                console.log('watch')
+                console.log('watch');
+                console.log(3423)
                 this.$store.subscribe((mutation, state) => {
                     switch (mutation.type) {
                         case 'SET_MainRoute':
-                          console.log($this.$store.get.Obj())
 
                             break;
                     }

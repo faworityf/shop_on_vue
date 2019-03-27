@@ -6,10 +6,9 @@ Vue.use(Router)
 
 let obj = store.getters.Obj;
 
-console.log('obj', obj)
 
 export default new Router({
     props: true,
     mode: 'history',
-    routes: obj.routes
+    routes: obj
 })
