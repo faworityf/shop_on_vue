@@ -34,7 +34,6 @@
             KatalogViewItems
         },
         mounted (el) {
-            console.log('Category')
             this.$store.dispatch('SET_MainRoute');
             this.$store.dispatch('SET_Favorites');
             this.$store.dispatch('SET_SubRoute');

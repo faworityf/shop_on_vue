@@ -29,13 +29,19 @@ export default new Vuex.Store({
                     menu: 'main'
                 },
                 {
-                    path: '/:alias',
+                    path: '/:alias/',
                     name: 'home',
                     component: Category,
                     menu: 'main'
                 },
                 {
-                    path: '/:alias/:alias',
+                    path: '/:alias/:alias/',
+                    name: 'home',
+                    component: Category,
+                    menu: 'main'
+                },
+                {
+                    path: '/:alias/:alias/:alias/',
                     name: 'home',
                     component: Category,
                     menu: 'main'
@@ -45,7 +51,8 @@ export default new Vuex.Store({
         mainRoutes: [],
         favorites: [],
         items: [],
-        subRoutes: []
+        subRoutes: [],
+        parents:[]
     },
     getters: {
         Obj: state => {
@@ -63,11 +70,14 @@ export default new Vuex.Store({
         subRoutes: state => {
             return state.subRoutes
         },
+        parents: state => {
+            return state.parents
+        },
     },
     mutations: {
         SET_MainRoute: (state, mainRoutes) => {
             state.mainRoutes = mainRoutes;
-            // state.globalObj.router = state.globalObj.router.concat(mainRoutes);
+            state.parents = state.parents.concat(mainRoutes);
         },
         SET_Favorites: (state, favorites) => {
             state.favorites = favorites;
@@ -75,7 +85,7 @@ export default new Vuex.Store({
         },
         SET_SubRoute: (state, subRoutes) => {
             state.subRoutes = subRoutes;
-            // state.globalObj.router = state.globalObj.router.concat(subRoutes);
+            state.parents = state.parents.concat(subRoutes);
 
         },
         SET_Items: (state, items) => {
