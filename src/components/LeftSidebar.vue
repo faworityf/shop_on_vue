@@ -1,22 +1,5 @@
 <template>
-    <div class="left-sidebar">
-        <div class="cat">Каталог: <span>выберите товар</span></div>
-        <ul class="catalog">
-            <li v-for="route in mainRoutes" v-if="route.menu == 'katalog' && route.parent == 2" >
-                <router-link :to="'/'+route.path">{{route.name}}</router-link>
-                <ul class="sub-ul-menu">
-                    <ul>
-                        <li v-for="rout in subRoutes"  v-if="route.menu == 'katalog' && route.id == rout.parent">
-                            <router-link :to="'/'+rout.path">{{rout.name}}</router-link>
-                        </li>
-                    </ul>
-                </ul>
-            </li>
-        </ul>
-        <div class="filters-product">
 
-        </div>
-    </div>
 </template>
 
 <script>
@@ -44,21 +27,12 @@
                             this.subRoutes = state.subRoutes;
                         case 'SET_Items':
                             this.goodsItems = state.items;
-                            this.createFilters();
                             break;
                     }
                 })
 
             },
-            createFilters: function () {
-                console.log(this.goodsItems);
-                for (let item in this.goodsItems) {
-                    if(this.goodsItems[item] == 'litrag' || this.goodsItems[item] == 'country') {
 
-                    }
-
-                }
-            }
         }
     }
 </script>

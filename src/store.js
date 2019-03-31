@@ -14,7 +14,7 @@ let global_obj = {
             menu: 'main'
         },
     ],
-    items: []
+    items: [],
 }
 
 
@@ -52,7 +52,7 @@ export default new Vuex.Store({
         favorites: [],
         items: [],
         subRoutes: [],
-        parents:[]
+        parents:[],
     },
     getters: {
         Obj: state => {
@@ -93,6 +93,10 @@ export default new Vuex.Store({
             // state.globalObj.router = state.globalObj.router.concat(items);
 
         },
+        SET_items_Filters: (state, items) => {
+            console.log(items)
+            state.filters = items;
+        }
     },
 
     actions: {
@@ -148,5 +152,8 @@ export default new Vuex.Store({
 
                 })
         },
+        SET_items_Filters: (context,st) => {
+            context.commit('SET_items_Filters', st);
+        }
     }
 })

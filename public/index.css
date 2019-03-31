@@ -182,7 +182,6 @@ header .nav {
     border-radius: 3px;
     /*overflow: hidden;*/
     z-index: 99;
-    position: relative;
 }
 /* catalog items */
 
@@ -194,19 +193,18 @@ header .nav {
     max-height: 1000px;
     overflow:visible;
 }
-.category-goods .cat {
+.cat {
     display: block;
     cursor: pointer;    color: #fff;
     font-size: 18px;
     font-family: Calibrii;
     text-decoration: none;
-    display: block;
     transition: .5s;
     position: relative;
     z-index: 1;
     position: relative;
 }
-.category-goods .cat span{
+.cat span{
     padding: 10px 0;
     text-align: center;
     display: block;
@@ -216,14 +214,14 @@ header .nav {
     background-color: #870007;
     /*overflow: hidden;*/
 }
-.catalog  li > ul {
+.catalog ul li > ul {
     display: none;
     position: absolute;
     right: -100%;
     top: 0;
     width: 100%;
 }
-.catalog  li.active > ul {
+.catalog ul li.active > ul {
     display: block;
 }
 .catalog li a {
@@ -240,7 +238,7 @@ header .nav {
 .main-menu {
     align-items: center;
 }
-.sub-ul-menu li:after,
+.sub-ul-menu ul li:after,
 .catalog  .main-menu:after {
     width: 0%;
     height: 1px;
@@ -254,22 +252,24 @@ header .nav {
     display: block;
     /*z-index: -1;*/
 }
-.sub-ul-menu li:hover a {
+.sub-ul-menu ul li:hover a {
     text-decoration: underline;
 }
 .catalog  .main-menu:hover:after {
     width: 100%;
 }
-
-.catalog > li:hover > ul {
+.catalog ul  {
+    position: relative;
+}
+.catalog ul > li:hover > ul {
     display: block;
 }
-.catalog  > li:hover > ul > ul{
+.catalog ul > li:hover > ul > ul{
     display: flex;
     flex-direction: column;
     height:465px;
     flex-wrap: wrap;
-    width: 310%;
+    width: 400%;
     background-color: #870007;
 }
 .main-content {
@@ -580,9 +580,7 @@ header .nav {
 .goods.list .prices {
     font: 26px/32px "Tahoma";
 }
-.cat {
-    display: none;
-}
+
 /* media */
 .menu-toggle {
     display: none;
@@ -829,5 +827,3 @@ header .nav {
     font-smooth: antialiased;
     -webkit-font-smoothing: subpixel-antialiased;
 }
-
-

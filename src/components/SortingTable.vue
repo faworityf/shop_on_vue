@@ -7,12 +7,12 @@
                     <span><span class="sorting js-sorting">от дешевых к дорогим</span></span>
                     <ul class="js-sort-by-choices">
                         <li>
-                            <a href="">
+                            <a href="" @click="changeDirection(true)">
                                 от дешевых к дорогим
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="" @click="changeDirection(false)">
                                 от дорогих к дешевым
                             </a>
                         </li>
@@ -58,7 +58,12 @@
 
 <script>
     export default {
-        name: "SortingTable"
+        name: "SortingTable",
+        methods: {
+            changeDirection:function (dir) {
+                this.$emit('changeDirection', dir);
+            }
+        }
     }
 </script>
 

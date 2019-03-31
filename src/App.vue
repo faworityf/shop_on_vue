@@ -9,7 +9,7 @@
               </div>
               <div class="container">
                   <ul class="menu">
-                      <li class="first leaf"><a href="/" title="">Магазин</a></li>
+                      <li class="first leaf"> <router-link to="/">Магазин</router-link></li>
                       <li class="leaf"><a href="/oplata-dostavka">Оплата и доставка</a></li>
                       <li class="leaf"><a href="/zakaz">Заказать</a></li>
                       <li class="leaf"><a href="/blagodarnosti">Отзывы</a></li>
