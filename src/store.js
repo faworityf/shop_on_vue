@@ -144,6 +144,7 @@ export default new Vuex.Store({
                 .then(function (response) {
                     let responseText = response.data.replace(/\r|\n/g, '');
                     responseText = responseText.replace(/}, ]/g, '}]');
+                    // console.log(responseText.slice( 23900, responseText.length))
                     responseText = JSON.parse(responseText);
                     for (let resp in responseText.catalog)  {
                         responseText.catalog[resp].component = Category
