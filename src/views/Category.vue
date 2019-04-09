@@ -1,10 +1,8 @@
 <template>
     <div>
-        <slider v-if="routes"></slider>
+        <slider v-if="routeMain"></slider>
         <div v-bind:class="[routeMain != true ? 'category-goods container' : 'container']">
             <KatalogViewItems ></KatalogViewItems>
-
-
         </div>
     </div>
 </template>
@@ -31,6 +29,7 @@
             this.$store.dispatch('SET_SubRoute');
             this.$store.dispatch('SET_Items');
             this.checkMainRoute();
+            this.$parent.$on('cartOpen', this.cartOpen)
         },
         watch: {
             $route(to, from) {
@@ -38,6 +37,9 @@
             }
         },
         methods: {
+            cartOpen:function() {
+                this.$emit('cartOpen', true);
+            },
             checkMainRoute: function () {
                 if (this.$route.path == '/') {
                     this.routeMain = true;

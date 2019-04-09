@@ -15,7 +15,7 @@
                       <li class="leaf"><a href="/blagodarnosti">Отзывы</a></li>
                       <li class="leaf"><a href="/call-back">Обратный звонок</a></li>
                       <li class="last leaf"><a href="/contacts">Контакты</a></li>
-                      <li class="last leaf"><a class="cart-open js-cart-open">Корзина</a></li>
+                      <li class="last leaf"><a class="cart-open js-cart-open" @click="cartOpen()">Корзина</a></li>
                   </ul>
               </div>
           </nav>
@@ -47,7 +47,14 @@
     <router-view/>
   </div>
 </template>
+<script>
+    export default {
+        methods: {
+            cartOpen:function () {
+                console.log(12323)
+                this.$emit('cartOpen', true);
+            }
+        }
+    }
+</script>
 
-<style lang="scss">
-
-</style>

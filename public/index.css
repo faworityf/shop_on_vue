@@ -170,6 +170,7 @@ header .nav {
 .content {
     display: flex;
     margin-top: 5px;
+    min-height: 100vh;
 }
 
 .left-sidebar {
@@ -585,8 +586,156 @@ header .nav {
 .menu-toggle {
     display: none;
 }
+.pop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.pop-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, .7);
+    z-index: 99;
+}
+.pop-inner {
+    position: relative;
+    z-index: 100;
+    width: 700px;
+    min-height: 400px;
+    max-height: 600px;
+    background-color: #fff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 
-/******************* item alone */
+}
+.cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 24px;
+    padding: 20px 0;
+}
+.cart-all-summ{
+    width: 100%;
+    text-align: right;
+}
+.close-pop {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+.close-pop img{
+    width: 100%;
+    height: 100%;
+}
+.pop-cart-items {
+    width: 91%;
+    display: block;
+    min-height: 300px;
+    max-height: 500px;
+}
+.item-foto img {
+    width: 35px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.error {
+    border-bottom: 1px solid red;
+}
+/*.cart-item  div{*/
+    /*margin: 0 20px ;*/
+/*}*/
+/*.cart-item  div:last-of-type,*/
+/*.cart-item  div:first-of-type{*/
+    /*margin: 0 0px 0px;*/
+/*}*/
+
+.cart-item-name {
+}
+.cart-items {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 41px;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin: 0 0 15px;
+}
+.item-main-info {
+    display: flex;
+    align-items: center;
+}
+.item-info-more {
+    margin: 0 0 0 20px;
+    width: 100%;
+}
+.item-info-else {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+.cart-item input {
+    background: transparent;
+    outline: none;
+    border: none;
+}
+.item-summ,
+.item-price,
+.item-litrag {
+    min-width: 100px;
+    text-align: center;
+}
+.item-quantity {
+    display: flex;
+    width: 50px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+.item-quantity input {
+    width: 30px;
+    text-align: center;
+}
+.item-summ input {
+    text-align: right;
+}
+
+.item-litrag input {
+    text-align: center;
+    width: 50px;
+}
+.item-remove {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 26px;
+    position: relative;
+    color: red;
+    cursor: pointer;
+}
+span.delete-cart-item {
+    transform: rotateZ(45deg);
+    position: absolute;
+    top: -4px;
+    left: 0;
+}
+    /******************* item alone */
 .item-about .item-content .good-else {
     max-height: initial;
 }

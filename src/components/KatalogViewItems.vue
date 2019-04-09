@@ -20,7 +20,6 @@
                 </li>
             </ul>
             <div class="filters-product" v-if="!routeMain">
-
                 <div class="filter filter-choose" v-if="filters_items.ages.length">
                     <span>Выдержка:</span>
                     <ul class="filter-ul">
@@ -93,7 +92,19 @@
                                     {{good.name.trim()}}
                                 </router-link>
                             </div>
-
+                            <div class="price-buy">
+                                <div class="prices">
+                                    <div class="price-before" v-if="good.old_price.trim()">{{good.old_price.trim()}}
+                                        грн.
+                                    </div>
+                                    <div class="price-before with-null" v-else></div>
+                                    <div class="price-current">{{good.price.trim()}} грн.</div>
+                                </div>
+                                <div class="buy-btns">
+                                    <div class="button but-oneclick js-buy-oneclick">Купить в один клик</div>
+                                    <div class="button but-buy js-buy-btn" @click="addToCart(good)">Добавить</div>
+                                </div>
+                            </div>
                             <div class="good-else">
                                 <div class="good-displacement good-info">
                                     Емкость: <span>{{good.litrag.trim()}} л.</span>
@@ -105,19 +116,7 @@
                                     Страна-производитель: <span>{{good.country.trim()}}</span>
                                 </div>
                             </div>
-                            <div class="price-buy">
-                                <div class="prices">
-                                    <div class="price-before" v-if="good.old_price.trim()">{{good.old_price.trim()}}
-                                        грн.
-                                    </div>
-                                    <div class="price-before with-null" v-else></div>
-                                    <div class="price-current">{{good.price.trim()}} грн.</div>
-                                </div>
-                                <div class="buy-btns">
-                                    <div class="button but-oneclick js-buy-oneclick">Купить в один клик</div>
-                                    <div class="button but-buy js-buy-btn">Добавить</div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -170,14 +169,95 @@
                 <!--{{good.content.trim()}}-->
             </div>
         </div>
+        <div class="pop pop-cart" v-show="cartOpened">
+            <div class="pop-wrap" @click="cartOpen()"></div>
+            <div class="pop-inner">
+
+
+                <div class="pop-cart-items" v-if="Object.keys(cartItems).length != 0">
+                    <div class="cart-header">
+                        <div class="cart-name">Корзина</div>
+                        <div class="close-pop" @click="cartOpen()"><img src="../../public/close.jpg" height="128" width="128"/>
+                        </div>
+                    </div>
+                    <div class="cart-items" v-if="!subscribeForm">
+                        <div class="cart-item" v-for="cartItem in cartItems">
+                            <div class="item-main-info">
+                                <div class="item-foto">
+                                    <img :src="'//m.absolut-kiev.com'+cartItem.item.image.trim()"/>
+                                </div>
+                            </div>
+                            <div class="item-info-more">
+                                <div class="item-name-wrap">
+                                    <div class="cart-item-name">
+                                        <span>{{cartItem.item.name.trim()}}</span>
+                                    </div>
+                                </div>
+                                <div class="item-info-else">
+                                    <div class="item-litrag">
+                                        <span>{{cartItem.item.litrag.trim() + 'л.'}}</span>
+                                    </div>
+                                    <div class="item-price">
+                                        <span>{{~~cartItem.item.price.trim() +' грн.'}}</span>
+                                    </div>
+                                    <div class="item-quantity">
+                                        <div class="plus-item" @click="minusCartItem(cartItem.item)">-</div>
+                                        <input type="number" name="quantity" :data-id="cartItem.item.id"
+                                               v-bind:value="cartItem.count" @input="setCartItem">
+                                        <div class="plus-item" @click="addToCart(cartItem.item)">+</div>
+                                    </div>
+
+                                    <div class="item-summ">
+                                        <span>{{~~cartItem.item.price.trim() * cartItem.count  +' грн.'}}</span>
+                                    </div>
+                                    <div class="item-remove">
+                                        <span class="delete-cart-item" @click="deleteCartItem(cartItem.item)">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-all-summ">
+                            <span>{{'Итого: '+ cartSumm +' грн.'}}</span>
+                            <div class="subscribe-form" @click="subscribeForm = !subscribeForm">Оформить заказ</div>
+                        </div>
+                    </div>
+                    <form action="" class="form-to-subscribe" @submit.prevent="sendOrder" v-if="subscribeForm">
+                        <input type="text" name="name"  v-model="forms.name.val" onkeypress="return /[А-Яа-яA-Za-z]/i.test(event.key)"
+                               placeholder="Имя" @input="checkForm('name')" v-bind:class="forms.name.sucs ? '' : 'error'">
+
+                        <input type="text" name="tel"  v-mask="'+38(###)-###-##-##'"
+                               v-model="forms.tel.val" placeholder="+38" @input="checkForm('tel')"
+                               v-bind:class="forms.tel.sucs ? '' : 'error'">
+                        <input type="text" name="email" v-model="forms.email.val"
+                               placeholder="Email" @input="checkForm('email')" v-bind:class="forms.email.sucs ? '' : 'error'">
+
+                        <button type="submit">Отправить</button>
+                    </form>
+                </div>
+                <div class="pop-cart-items" v-if="Object.keys(cartItems).length == 0">
+                    <div class="cart-header">
+                        <div class="cart-name">Корзина пуста</div>
+                        <div class="close-pop" @click="cartOpen()"><img src="../../public/close.jpg" height="128" width="128"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </template>
 
 <script>
+    import Vue from 'vue'
     import SortingTable from '@/components/SortingTable.vue'
     import VueSlider from 'vue-slider-component'
     import 'vue-slider-component/theme/antd.css'
+    import VueMask from 'v-mask'
+    import axios from 'axios'
+    Vue.use(VueMask);
+    import { VueMaskDirective } from 'v-mask'
+    Vue.directive('mask', VueMaskDirective);
     /*
     * filters
     *  ages:[],
@@ -192,7 +272,8 @@
         props: ['goods'],
         components: {
             SortingTable,
-            VueSlider
+            VueSlider,
+            VueMask
         },
         data() {
             return {
@@ -210,8 +291,12 @@
                 subRoutes: [],
                 maxPrice: 0,
                 minPrice: 0,
+                cartItems: {},
+                subscribeForm:false,
+                cartSumm: 0,
                 maxPriceFilter: 0,
                 minPriceFilter: 0,
+                cartOpened: false,
                 slider_props: {
                     min: 0,
                     value: [0, 0],
@@ -233,12 +318,27 @@
                     color: [],
                     packs: [],
                     sugar: []
+                },
+                forms:{
+                    tel:{
+                        sucs:true,
+                        val:''
+                    },
+                    name:{
+                        sucs:true,
+                        val:''
+                    },
+                    email:{
+                        sucs:true,
+                        val:''
+                    }
                 }
-
             }
         },
         mounted() {
             this.watchGetters();
+            this.$parent.$on('cartOpen', this.cartOpen)
+
         },
         watch: {
             $route(to, from) {
@@ -246,6 +346,86 @@
             }
         },
         methods: {
+            checkForm:function (type) {
+                if(type == 'name'){
+                    this.forms.name.val.length < 3 ? this.forms.name.sucs = false : this.forms.name.sucs = true
+                }else if(type == 'tel') {
+                    this.forms.tel.val.length != 18 ? this.forms.tel.sucs = false : this.forms.tel.sucs = true
+                }else if(type == 'email') {
+                    this.validEmail(this.forms.email.val) ? this.forms.email.sucs = true : this.forms.email.sucs = false
+                }
+            },
+            sendOrder:function () {
+               let checked = this.checkForm();
+               if( this.forms.tel.sucs &&  this.forms.email.sucs &&  this.forms.name.sucs){
+                   let letter = ''
+                   let u = this.forms.name.val
+                   let t = this.forms.tel.val
+                   let e = this.forms.email.val
+                   letter = '<table style="width: 500px">'
+                   letter += '<tbody>'
+                   letter += '<tr><td>Название</td><td>Литраж</td><td>Цена</td><td>Колл</td><td>Сумма</td>'
+                        for (let item in this.cartItems) {
+                            letter += '<tr>';
+                            letter += '<td style=\"width:150px\">' + this.cartItems[item].item.name +'</td>';
+                            letter += '<td style=\"min-width: 50px; text-align: center;\">' + this.cartItems[item].item.litrag.trim() + 'л.</td>';
+                            letter += '<td style=\"min-width: 50px; text-align: right;\">' + ~~this.cartItems[item].item.price.trim() +' грн.</td>';
+                            letter += '<td style=\"min-width: 50px; text-align: center;">' + this.cartItems[item].count +'</td>';
+                            letter += '<td style=\"min-width: 50px; text-align: right;\">' + ~~this.cartItems[item].item.price.trim() * this.cartItems[item].count  +' грн.</td>';
+                            letter += '</tr>';
+                        }
+                    letter += '<tr><td></td><td></td><td></td><td>Итого:</td> <td>' + this.cartSumm +' грн.</td></tr>';
+                   letter += '</tbody>'
+                   letter += '</table>'
+                    // letter = JSON.stringify(letter);
+                   axios({
+                       method: 'get',
+                       url: 'http://m.absolut-kiev.com/assets/js/sendEmail.php?letter='+letter +'&user=' +u  +'&tel=' +t +'&email=' +e,
+                   }).then(function (resp) {
+                           console.log(resp)
+                       })
+               }
+            },
+            validEmail: function (email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            },
+            cartOpen: function () {
+                this.cartOpened = !this.cartOpened;
+                this.subscribeForm = false;
+            },
+            addToCart: function (item) {
+                if (this.cartItems[item.id]) {
+                    this.cartItems[item.id].count += 1;
+                } else {
+                    this.$set(this.cartItems, item.id, {});
+                    this.$set(this.cartItems[item.id], 'count', 1);
+                    this.cartItems[item.id].item = item;
+                }
+                this.cartCount();
+            },
+            setCartItem: function (e) {
+                this.cartItems[~~e.target.getAttribute('data-id')].count = e.target.value;
+                this.cartCount();
+            },
+            minusCartItem: function (item) {
+                if (this.cartItems[item.id].count - 1) {
+                    this.cartItems[item.id].count -= 1;
+                } else {
+                    this.$delete(this.cartItems, item.id);
+                }
+                this.cartCount();
+            },
+            deleteCartItem: function (item) {
+                this.$delete(this.cartItems, item.id);
+                this.cartCount();
+            },
+            cartCount:function (){
+                this.cartSumm = 0;
+                for (let item in this.cartItems) {
+                    this.cartSumm += this.cartItems[item].count * this.cartItems[item].item.price
+                }
+            },
             watchGetters: function () {
                 this.$store.subscribe((mutation, state) => {
                     if (mutation.type == 'SET_MainRoute') {
@@ -343,7 +523,7 @@
             getFilters: function (items) {
 
                 for (let item in items.filters) {
-                    console.log(item, items.filters[item])
+                    // console.log(item, items.filters[item])
                     if (this.filters_items[item].indexOf(items.filters[item]) == -1 && items.filters[item] != "") {
                         this.filters_items[item].push(items.filters[item]);
                     }
