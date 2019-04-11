@@ -4,7 +4,7 @@ import axios from 'axios'
 import Home from '@/views/Home'
 import Category from '@/views/Category'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 let global_obj = {
     routes: [
         {
@@ -94,7 +94,6 @@ export default new Vuex.Store({
 
         },
         SET_items_Filters: (state, items) => {
-            console.log(items)
             state.filters = items;
         }
     },
@@ -155,6 +154,10 @@ export default new Vuex.Store({
         },
         SET_items_Filters: (context,st) => {
             context.commit('SET_items_Filters', st);
+        },
+        SET_COOKIE_CART: (context, st) => {
+            console.log(st)
+            sessionStorage.setItem('cartItems', JSON.stringify(st));
         }
     }
 })

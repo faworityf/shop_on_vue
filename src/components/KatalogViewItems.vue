@@ -1,17 +1,20 @@
 <template>
     <div class="content">
         <div class="left-sidebar">
-            <ul class="catalog">
-                <li class="cat">
-                    <span>Каталог товаров</span>
+            <ul v-bind:class="[menuOpened ? 'active' : 'unactive', 'catalog']">
+                <li class="cat" 
+                     @mouseover="mobile ? '': menuOpened = true"
+                     @mouseleave="mobile ? '' :  menuOpened = false"
+                     >
+                    <span class="catalog-name" @click="mobile ? menuOpened = true : ''">Каталог товаров</span>
                     <ul>
-                        <li v-for="route in mainRoutes" v-if="route.menu == 'katalog' && route.parent == 2">
-                            <router-link :to="'/'+route.path">{{route.name}}</router-link>
+                        <li v-for="route in mainRoutes" v-if="route.menu == 'katalog' && route.parent == 2" @click="mobile ? '' : menuOpened = false">
+                            <router-link :to="'/'+route.path"  >{{route.name}}</router-link>
                             <ul class="sub-ul-menu">
                                 <ul>
-                                    <li v-for="rout in subRoutes"
+                                    <li v-for="rout in subRoutes" @click="menuOpened = false"
                                         v-if="route.menu == 'katalog' && route.id == rout.parent">
-                                        <router-link :to="'/'+rout.path">{{rout.name}}</router-link>
+                                        <router-link :to="'/'+rout.path" >{{rout.name}}</router-link>
                                     </li>
                                 </ul>
                             </ul>
@@ -62,8 +65,8 @@
                 </div>
                 <div class="filter price-range">
                     <span>Цена:</span>
-                    <vue-slider v-bind="slider_props" ref="slider" @change="setValues()" :max="maxPrice"
-                                :value="[0,maxPrice]"></vue-slider>
+                    <vue-slider v-bind="slider_props" ref="slider" @change="setValues()" :max="maxPrice" :min="minPrice"
+                                v-model="priceModel"></vue-slider>
                 </div>
             </div>
         </div>
@@ -249,18 +252,20 @@
 </template>
 
 <script>
-    import Vue from 'vue'
-    import SortingTable from '@/components/SortingTable.vue'
-    import VueSlider from 'vue-slider-component'
-    import 'vue-slider-component/theme/antd.css'
-    import VueMask from 'v-mask'
-    import axios from 'axios'
+    import Vue from 'vue';
+    import SortingTable from '@/components/SortingTable.vue';
+    import VueSlider from 'vue-slider-component';
+    import 'vue-slider-component/theme/antd.css';
+    import VueMask from 'v-mask';
+    import axios from 'axios';
+    import VueCookies from 'vue-cookies'
     Vue.use(VueMask);
+    Vue.use( VueCookies);
     import { VueMaskDirective } from 'v-mask'
     Vue.directive('mask', VueMaskDirective);
     /*
-    * filters
-    *  ages:[],
+       filters
+       ages:[],
        class:[],
        color:[],
        pack:[],
@@ -277,6 +282,9 @@
         },
         data() {
             return {
+                mobile: window.matchMedia('(max-width: 768px)').matches,
+                menuOpened:false,
+                timeout:null,
                 goodsParsed: [],
                 goodsFavorites: [],
                 goodsItems: [],
@@ -296,6 +304,7 @@
                 cartSumm: 0,
                 maxPriceFilter: 0,
                 minPriceFilter: 0,
+                priceModel :[this.minPriceFilter, this.maxPriceFilter],
                 cartOpened: false,
                 slider_props: {
                     min: 0,
@@ -337,8 +346,13 @@
         },
         mounted() {
             this.watchGetters();
-            this.$parent.$on('cartOpen', this.cartOpen)
-
+            this.$parent.$on('cartOpen', this.cartOpen);
+            let cartGet = sessionStorage.getItem('cartItems');
+            if(cartGet != undefined && cartGet != null) {
+                this.cartItems = JSON.parse(cartGet);
+                this.cartChangeItems();
+            }
+            this.menuOpened=false;
         },
         watch: {
             $route(to, from) {
@@ -402,11 +416,11 @@
                     this.$set(this.cartItems[item.id], 'count', 1);
                     this.cartItems[item.id].item = item;
                 }
-                this.cartCount();
+                this.cartChangeItems();
             },
             setCartItem: function (e) {
                 this.cartItems[~~e.target.getAttribute('data-id')].count = e.target.value;
-                this.cartCount();
+                this.cartChangeItems();
             },
             minusCartItem: function (item) {
                 if (this.cartItems[item.id].count - 1) {
@@ -414,18 +428,23 @@
                 } else {
                     this.$delete(this.cartItems, item.id);
                 }
-                this.cartCount();
+                this.cartChangeItems();
             },
             deleteCartItem: function (item) {
                 this.$delete(this.cartItems, item.id);
-                this.cartCount();
+                this.cartChangeItems();
             },
-            cartCount:function (){
+            
+            cartChangeItems:function (){
                 this.cartSumm = 0;
                 for (let item in this.cartItems) {
                     this.cartSumm += this.cartItems[item].count * this.cartItems[item].item.price
                 }
+                this.$store.dispatch('SET_COOKIE_CART', this.cartItems);
             },
+
+
+
             watchGetters: function () {
                 this.$store.subscribe((mutation, state) => {
                     if (mutation.type == 'SET_MainRoute') {
@@ -451,6 +470,7 @@
                     } else if (mutation.type == 'SET_items_Filters') {
                         console.log('state', state)
                     }
+
                 })
             },
             getAliasToId: function () {
@@ -517,7 +537,8 @@
                             this.maxPrice = +this.goodsParsed[item].price;
                     }
                 }
-                this.maxPriceFilter = this.maxPrice
+                this.maxPriceFilter = this.maxPrice;
+                this.priceModel =[this.minPriceFilter, this.maxPriceFilter]
                 this.sortItems();
             },
             getFilters: function (items) {
@@ -537,14 +558,16 @@
                 }
             },
             setValues: function () {
+                this.timeout  ? clearTimeout(this.timeout) : '';
                 let values = this.$refs.slider.getValue();
-
-                this.sortItems();
                 let params = {};
                 params[this.$route.path] = {'max': values[1], 'min': values[0]}
                 this.$store.dispatch('SET_items_Filters', params);
+
                 this.maxPriceFilter = values[1]
                 this.minPriceFilter = values[0]
+                this.priceModel =[this.minPriceFilter, this.maxPriceFilter]
+                this.sortItems();
             },
             sortItems: function () {
                 function comparePrice(item1, item2) {
