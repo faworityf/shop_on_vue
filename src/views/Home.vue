@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!--<slider></slider>-->
         <div class="container">
             <div class="content">
                 <LeftSidebar ></LeftSidebar>
@@ -17,7 +16,6 @@
     import LeftSidebar from '@/components/LeftSidebar.vue'
     import SortingTable from '@/components/SortingTable.vue'
     import KatalogViewItems from '@/components/KatalogViewItems.vue'
-
 
     export default {
         data() {
@@ -39,18 +37,7 @@
             this.watchGetters();
         },
         methods: {
-            watchGetters: function () {
-                console.log('watch');
-                console.log(3423)
-                this.$store.subscribe((mutation, state) => {
-                    switch (mutation.type) {
-                        case 'SET_MainRoute':
 
-                            break;
-                    }
-                })
-
-            },
         }
     }
 </script>
