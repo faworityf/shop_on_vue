@@ -20,6 +20,12 @@ let obj = {
             menu: 'main'
         },
         {
+            path: '/vodka/:alias/',
+            name: 'vodka',
+            component: Category,
+            menu: 'main'
+        },
+        {
             path: '/:alias/:alias/',
             name: 'subitems',
             component: Category,

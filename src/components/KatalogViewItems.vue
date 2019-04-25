@@ -129,7 +129,7 @@
                     <div class="good-wrap">
                         <div class="good-img">
                             <router-link :to="good.path.trim()">
-                                <img :src="'//m.absolut-kiev.com'+good.image.trim()"/>
+                                <img :src="'//absolut-kiev.com'+good.image.trim()"/>
                             </router-link>
                         </div>
                         <div class="good-description">
@@ -172,7 +172,7 @@
 
             <div class="main-table" v-if="good">
                 <div class="img-main js-main-img" v-if="good.image">
-                    <img :src="'//m.absolut-kiev.com' + good.image.trim()"/>
+                    <img :src="good.image.trim()"/>
                 </div>
                 <div class="item-about">
                     <div class="item-name" v-if="good.name">

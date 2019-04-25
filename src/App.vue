@@ -30,9 +30,9 @@
             <div class="container mobile-pos">
                 <div class="headerunder-menu flex">
                     <div class="header-right">
-                        <a href="/" title="Главная" rel="home" id="logo">
+                        <router-link to="/" title="Главная" rel="home" id="logo">
                             <img src="assets/img/logo.png" alt="Главная">
-                        </a>
+                        </router-link>
                     </div>
                     <div class="header-center">
                         <div class="header-contacts">

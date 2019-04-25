@@ -7,17 +7,7 @@ import Vuebar from 'vuebar';
 
 Vue.use(Vuebar);
 Vue.use(Vuex);
-let global_obj = {
-    routes: [
-        {
-            path: '/',
-            name: 'home',
-            component: Home,
-            menu: 'main'
-        },
-    ],
-    items: [],
-}
+
 let itemsGot = 0;
 // let route = 'http://absolut-kiev.com'
 let route = ''
