@@ -1,27 +1,38 @@
 <template>
-    <div class="left-sidebar">
-        <div class="cat">Каталог: <span>выберите товар</span></div>
-        <ul class="catalog">
-            <li v-for="route in routes.routes"><router-link  :to="route.path">{{route.name}}</router-link></li>
-        </ul>
-    </div>
+
 </template>
 
 <script>
     export default {
         name: "KatalogMenu",
+        props: ['routes'],
         data() {
             return {
-                routes:null
+                mainRoutes: [],
+                subRoutes: [],
+                goodsItems: [],
+                filters:[]
             }
         },
-        mounted (el) {
-            this.routes = this.$store.getters.Obj;
-            console.log(this.routes)
+        mounted() {
+            this.watchGetters();
+        },
+        methods: {
+            watchGetters: function () {
+                this.$store.subscribe((mutation, state) => {
+                    switch (mutation.type) {
+                        case 'SET_MainRoute':
+                            this.mainRoutes = state.mainRoutes;
+                        case 'SET_SubRoute':
+                            this.subRoutes = state.subRoutes;
+                        case 'SET_Items':
+                            this.goodsItems = state.items;
+                            break;
+                    }
+                })
+
+            },
+
         }
     }
 </script>
-
-<style scoped>
-
-</style>
